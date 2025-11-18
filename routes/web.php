@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DenunciasController::class, 'index']);
 
-Route::resource('denuncias', DenunciasController::class)->only([
-    'index',
-    'create',
-    'edit',
-]);
+Route::get('denuncias', [DenunciasController::class, 'index'])->name('denuncias.index');
+Route::get('denuncias/create', [DenunciasController::class, 'create'])->name('denuncias.create');
+Route::get('denuncias/{denuncia}/edit', [DenunciasController::class, 'edit'])->name('denuncias.edit');

@@ -4,9 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Denuncia;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -20,7 +20,6 @@ class DenunciasMuni extends Component
     public $filterEstado = '';
     public $filterCiudadano = '';
     public $filterUbicacion = '';
-    public $filterTelefono = '';
     public $filterDesde;
     public $filterHasta;
 
@@ -37,7 +36,6 @@ class DenunciasMuni extends Component
         'filterEstado' => ['except' => ''],
         'filterCiudadano' => ['except' => ''],
         'filterUbicacion' => ['except' => ''],
-        'filterTelefono' => ['except' => ''],
         'filterDesde' => ['except' => ''],
         'filterHasta' => ['except' => ''],
         'sortField' => ['except' => 'fecha_registro'],
@@ -76,7 +74,6 @@ class DenunciasMuni extends Component
             'filterEstado',
             'filterCiudadano',
             'filterUbicacion',
-            'filterTelefono',
             'filterDesde',
             'filterHasta',
         ]);
@@ -86,17 +83,7 @@ class DenunciasMuni extends Component
 
     public function render()
     {
-        if (! Schema::hasTable('denuncias')) {
-            $denuncias = new LengthAwarePaginator(
-                [],
-                0,
-                (int) $this->perPage,
-                $this->page ?? 1,
-                [
-                    'path' => Paginator::resolveCurrentPath(),
-                ]
-            );
-        } else {
+        try {
             $denuncias = Denuncia::query()
                 ->when($this->filterText, function (Builder $query) {
                     $query->where(function (Builder $query) {
@@ -106,19 +93,33 @@ class DenunciasMuni extends Component
                             ->orWhere('ubicacion', 'like', "%{$this->filterText}%");
                     });
                 })
-                ->when($this->filterEstado, fn(Builder $query) => $query->where('estado', $this->filterEstado))
-                ->when($this->filterCiudadano, fn(Builder $query) => $query->where('ciudadano', 'like', "%{$this->filterCiudadano}%"))
-                ->when($this->filterUbicacion, fn(Builder $query) => $query->where('ubicacion', 'like', "%{$this->filterUbicacion}%"))
-                ->when($this->filterTelefono, fn(Builder $query) => $query->where('telefono_ciudadano', 'like', "%{$this->filterTelefono}%"))
-                ->when($this->filterDesde, fn(Builder $query) => $query->whereDate('fecha_registro', '>=', $this->filterDesde))
-                ->when($this->filterHasta, fn(Builder $query) => $query->whereDate('fecha_registro', '<=', $this->filterHasta))
+                ->when($this->filterEstado, fn (Builder $query) => $query->where('estado', $this->filterEstado))
+                ->when($this->filterCiudadano, fn (Builder $query) => $query->where('ciudadano', 'like', "%{$this->filterCiudadano}%"))
+                ->when($this->filterUbicacion, fn (Builder $query) => $query->where('ubicacion', 'like', "%{$this->filterUbicacion}%"))
+                ->when($this->filterDesde, fn (Builder $query) => $query->whereDate('fecha_registro', '>=', $this->filterDesde))
+                ->when($this->filterHasta, fn (Builder $query) => $query->whereDate('fecha_registro', '<=', $this->filterHasta))
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->paginate((int) $this->perPage);
+
+            $tableMissing = false;
+        } catch (QueryException $exception) {
+            $denuncias = new LengthAwarePaginator(
+                [],
+                0,
+                (int) $this->perPage,
+                $this->page ?? 1,
+                [
+                    'path' => Paginator::resolveCurrentPath(),
+                ]
+            );
+
+            $tableMissing = true;
         }
 
         return view('livewire.denuncias-muni', [
             'denuncias' => $denuncias,
             'estados' => $this->availableStatuses(),
+            'tableMissing' => $tableMissing ?? false,
         ]);
     }
 
