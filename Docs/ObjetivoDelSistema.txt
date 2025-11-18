@@ -1,0 +1,24 @@
+A. Enunciado:
+El municipio de una ciudad está buscando implementar una plataforma digital
+que permita a los ciudadanos realizar denuncias sobre diferentes problemas
+urbanos, como baches en las calles, mal estado de los parques, recolección de
+basura inadecuada, entre otros. Para ello, han solicitado a varios
+desarrolladores que participen en una prueba de competencias que consiste en
+desarrollar un prototipo funcional de una aplicación web que gestione estas
+denuncias de manera eficiente.
+
+
+B. Requerimientos:
+1. Funcionalidades principales:
+✔ Gestión de denuncias: Los usuarios deben poder crear, editar, y eliminar
+denuncias. Cada denuncia debe tener un título, imagen, descripción, ubicación,
+estado, datos del ciudadano que realiza la denuncia.
+✔ Estado de las denuncias: Las denuncias deben tener un estado
+(pendiente, en proceso, resuelto).
+✔ Visualización de denuncias: Los usuarios deben poder ver todas las
+denuncias registradas, realizar búsquedas por título, ciudadano,
+ubicación, además las denuncias deben estar paginadas.
+
+
+Responsive Design: La aplicación debe ser responsive para que funcione
+adecuadamente en dispositivos móviles y de escritorio
