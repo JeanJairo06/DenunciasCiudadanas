@@ -1,9 +1,11 @@
 @extends('layout.app')
 
-@section('title', $mode === 'edit' ? 'Editar denuncia' : 'Registrar denuncia')
+@section('title', isset($denuncia) && $denuncia ? 'Editar denuncia' : 'Registrar denuncia')
 
 @section('content')
-    <div class="max-w-5xl mx-auto">
-        @livewire('denuncia-form', ['denuncia' => $denuncia])
-    </div>
+    @if(isset($denuncia) && $denuncia)
+        @livewire('denuncia-form', ['denuncia' => $denuncia], key($denuncia->id))
+    @else
+        @livewire('denuncia-form', ['denuncia' => null], key('create'))
+    @endif
 @endsection

@@ -21,7 +21,6 @@ class DenunciasController extends Controller
     {
         return view('denuncias.action', [
             'denuncia' => null,
-            'mode' => 'create',
         ]);
     }
 
@@ -32,7 +31,6 @@ class DenunciasController extends Controller
     {
         return view('denuncias.action', [
             'denuncia' => $denuncia,
-            'mode' => 'edit',
         ]);
     }
 }

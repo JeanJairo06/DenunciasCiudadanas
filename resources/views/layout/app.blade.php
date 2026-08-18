@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     @vite('resources/css/app.css')
     @livewireStyles
 </head>
+
 <body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
     @include('layout.header')
 
@@ -17,7 +19,7 @@
     @include('layout.footer')
 
     @livewireScripts
-    @vite('resources/js/app.js')
+   @vite('resources/js/app.js')
     @include('layout.confirm')
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
     <script>
@@ -31,4 +33,5 @@
         window.addEventListener('layout-confirm', initLucideIcons);
     </script>
 </body>
+
 </html>
